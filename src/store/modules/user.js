@@ -1,15 +1,22 @@
-import { login } from '@/api/user.js'
+import { login, getUserInfo1 } from '@/api/user.js'
 import md5 from 'md5'
 import * as utils from '@/urils/storage'
-import { TOKEN } from '@/common/common'
+import { TOKEN, USER_INFO } from '@/common/common'
+import router from '@/router/index'
+import { setTimeStamp } from '@/urils/auth.js'
 const state = {
-  token: utils.getItem(TOKEN) || ''
+  token: utils.getItem(TOKEN) || '',
+  userInfo: utils.getItem(USER_INFO) || {}
 }
 const getters = {}
 const mutations = {
   setToken(state, token) {
     state.token = token
     utils.setItem(TOKEN, token)
+  },
+  setUserInfo(state, userInfo) {
+    state.userInfo = userInfo
+    utils.setItem(USER_INFO, userInfo)
   }
 }
 const actions = {
@@ -25,12 +32,30 @@ const actions = {
         .then((res) => {
           // 保存token 保存到本地存储中
           commit('setToken', res.token)
+          // 记录token的获取时间
+          setTimeStamp()
           resolve()
         })
         .catch((err) => {
           reject(err)
         })
     })
+  },
+  logout({ commit }) {
+    // 清理用户数据
+    commit('setToken', '')
+    // 跳转登录页
+    router.push('/login')
+  },
+  getUserInfo({ commit }) {
+    alert(1)
+    getUserInfo1()
+      .then((res) => {
+        commit('setUserInfo', res)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 }
 

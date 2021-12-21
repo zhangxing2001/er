@@ -9,4 +9,10 @@ export const login = (data) => {
     data
   })
 }
-// 请求其他....
+// 获取用户数据
+export const getUserInfo1 = () => {
+  return axios.request({
+    url: '/sys/profile',
+    method: 'GET'
+  })
+}
