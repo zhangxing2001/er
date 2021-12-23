@@ -1,5 +1,6 @@
 <template>
   <div class="">
+    <div>个人中心</div>
     <el-row>
       <el-button>Default</el-button>
       <el-button type="primary">Primary</el-button>
@@ -10,12 +11,15 @@
       <el-button>中文</el-button>
     </el-row>
     <el-pagination
-      :page-size="20"
-      :pager-count="11"
-      layout="prev, pager, next"
+      v-model:currentPage="currentPage1"
+      :page-size="100"
+      layout="total, prev, pager, next"
       :total="1000"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
     >
     </el-pagination>
+    <p>{{ $t('msg.login.title') }}</p>
   </div>
 </template>
 

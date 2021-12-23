@@ -7,7 +7,7 @@
           item.meta.title
         }}</span>
         <a v-else class="redirect" @click.prevent="onLinkClick(item)">{{
-          item.meta.title
+          getTitle(item.meta.title)
         }}</a>
       </el-breadcrumb-item>
     </transition-group>
@@ -17,6 +17,7 @@
 <script setup>
 import { watch, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { getTitle } from '@/urils/i18n'
 const route = useRoute()
 const router = useRouter()
 const breadcrumbData = ref([])

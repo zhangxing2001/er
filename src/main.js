@@ -13,7 +13,10 @@ import initSvgIcon from './icon_svg/index.js'
 // 用户鉴权
 import './permission.js'
 
+// 导入i18n
+import i18n from './i18n/index'
+
 const app = createApp(App)
 initSvgIcon(app)
 installElementPlus(app)
-app.use(store).use(router).mount('#app')
+app.use(store).use(router).use(i18n).mount('#app')

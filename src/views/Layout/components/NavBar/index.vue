@@ -4,6 +4,8 @@
     <Cuttle class="cuttle-container" />
     <Breadcrumb class="breadcrumb-container" />
     <div class="right-menu">
+      <!-- 国际化按钮 -->
+      <SelectLasng class="right-menu-item" />
       <el-dropdown class="avatar-container">
         <!-- 头像 -->
         <div class="avatar-wrapper">
@@ -11,9 +13,11 @@
         </div>
         <template #dropdown>
           <el-dropdown-menu class="user-drop-down">
-            <el-dropdown-item>首页</el-dropdown-item>
-            <el-dropdown-item>课程主页</el-dropdown-item>
-            <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
+            <el-dropdown-item>{{ $t('msg.navBar.home') }}</el-dropdown-item>
+            <el-dropdown-item>{{ $t('msg.navBar.course') }}</el-dropdown-item>
+            <el-dropdown-item @click="logout">{{
+              $t('msg.navBar.logout')
+            }}</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -25,6 +29,7 @@
 import avatar from '@/assets/logo.png'
 import Cuttle from '@/components/Cuttle/index.vue'
 import Breadcrumb from '@/components/Breadcrumb/index.vue'
+import SelectLasng from '@/components/SelectLang/index.vue'
 import { useStore } from 'vuex'
 const store = useStore()
 const logout = () => {
@@ -58,6 +63,19 @@ const logout = () => {
     align-items: center;
     float: right;
     padding-right: 16px;
+    :deep(.right-menu-item) {
+      display: inline-block;
+      padding: 0 18px 0 0;
+      color: #ccc;
+      vertical-align: text-bottom;
+      .defaultSvgClass {
+        font-size: 24px;
+        padding: 14px;
+        &:hover {
+          background: rgba(0, 0, 0, 0.1);
+        }
+      }
+    }
     .avatar-container {
       cursor: pointer;
       .avatar-wrapper {

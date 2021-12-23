@@ -7,7 +7,8 @@
       :rules="loginRules"
     >
       <div class="title-container">
-        <h3 class="title">用户登录</h3>
+        <h3 class="title">{{ $t('msg.login.title') }}</h3>
+        <SelectLang class="select-lang" />
       </div>
       <el-form-item prop="username">
         <span class="svg-container">
@@ -44,17 +45,21 @@
         type="primary"
         @click="handleLogin"
         style="width: 100%; margin-top: 30px"
-        >登录{{ store.state.user.token }}</el-button
+        >{{ $t('msg.login.loginBtn') }}</el-button
       >
+      <div class="tips" v-html="$t('msg.login.desc')"></div>
     </el-form>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { passwordValidate } from './rule.js'
+import { ref, watch } from 'vue'
+import { passwordValidate, usernameValidate } from './rule.js'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import SelectLang from '@/components/SelectLang/index.vue'
+// import { useI18n } from 'vue-i18n'
+// const i18n = useI18n()
 const router = useRouter()
 const store = useStore()
 // 表单数据
@@ -65,7 +70,14 @@ const loginForm = ref({
 
 // 表单验证逻辑
 const loginRules = ref({
-  username: [{ required: true, trigger: 'blur', message: '账号必须填写' }],
+  username: [
+    {
+      required: true,
+      trigger: 'blur',
+      // message: i18n.t('msg.login.usernameRule')
+      validator: usernameValidate()
+    }
+  ],
   password: [
     {
       trigger: 'blur',
@@ -97,6 +109,15 @@ const handleLogin = () => {
     // 只有在登录成功的情况下，才能执行登录跳转
   })
 }
+// 监听getters.Language 的变化
+watch(
+  () => store.getters.lamguage,
+  (newvalue, oldvalue) => {
+    // 中英文切换了 验证重新执行
+    loginRef.value.validateField('username')
+    loginRef.value.validateField('password')
+  }
+)
 </script>
 
 <style lang="scss" scoped>
@@ -117,6 +138,16 @@ $cursor: #fff;
       margin: 0 auto 40px auto;
       text-align: center;
       font-weight: bold;
+    }
+    :deep(.select-lang) {
+      position: absolute;
+      right: 0px;
+      top: 4px;
+      background: #fff;
+      border-radius: 4px;
+      .el-dropdown {
+        font-size: 24px;
+      }
     }
   }
   .login-form {
@@ -150,6 +181,10 @@ $cursor: #fff;
       color: $dark_gray;
       vertical-align: middle;
       display: inline-block;
+    }
+    .tips {
+      font-size: 16px;
+      line-height: 28px;
     }
   }
 }
