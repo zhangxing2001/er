@@ -1,27 +1,31 @@
 <template>
-  <div class="app-wrapper">
+  <div
+    class="app-wrapper"
+    :class="store.getters.sideBarOpen ? '' : 'hideSidebar'"
+  >
     <!-- 左边 -->
-    <sideber
+    <side-bar
+      id="guide-sidebar"
       class="siderbar-container"
-      :style="{ backgroundColor: variables.subMenuBg }"
+      :style="{ backgroundColor: store.getters.cssVar.menuBg }"
     />
     <!-- 右边 -->
     <div class="main-container">
       <div class="fixed-header">
         <nav-bar />
+        <!-- 顶部导航栏组件 -->
       </div>
-      <appmain />
+      <app-main />
     </div>
   </div>
 </template>
-
 <script setup>
-import Appmain from './components/Appmain/index.vue'
-import Sideber from './components/Sideber/index.vue'
-import NavBar from './components/NavBar/index.vue'
-import variables from '@/styles/variables.scss'
+import SideBar from './components/Sideber'
+import NavBar from './components/NavBar'
+import AppMain from './components/Appmain'
+import { useStore } from 'vuex'
+const store = useStore()
 </script>
-
 <style lang="scss" scoped>
 @import '~@/styles/common.scss';
 @import '~@/styles/variables.scss';
@@ -31,25 +35,34 @@ import variables from '@/styles/variables.scss'
   height: 100%;
   width: 100%;
   .siderbar-container {
+    width: $sideBarWidth;
+    height: 100vh;
+    float: left;
+    overflow: hidden; // 侧边栏超出出现了滚动条
     transition: width 0.28s;
-    width: 210px !important;
-    height: 100%;
     position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
     z-index: 1001;
-    overflow: hidden;
   }
   .main-container {
     .fixed-header {
-      position: fixed !important;
-      top: 0px;
-      right: 0px;
+      position: fixed;
+      top: 0;
+      right: 0;
       z-index: 10;
       width: calc(100% - #{$sideBarWidth}); // 用来动态计算宽度的
-      // width: calc(100% - #{$sideBarWidth}); // 用来动态计算宽度的
+      transition: width 0.28s;
     }
+  }
+}
+.hideSidebar {
+  .siderbar-container {
+    width: #{$sideBarhideWidth};
+  }
+  .fixed-header {
+    width: calc(100% - #{$sideBarhideWidth}) !important; // 用来动态计算宽度的
   }
 }
 </style>
